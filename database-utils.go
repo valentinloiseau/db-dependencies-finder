@@ -74,6 +74,7 @@ func findBrokenDependenciesForTable(table string) []BrokenDependingTable {
 	deps := findDependingTables(table)
 
 	for i := range deps {
+		primary_name := fmt.Sprintf(app.parameters.primary_key_pattern, table)
 		foreign_name := fmt.Sprintf(app.parameters.foreign_key_pattern, table)
 
 		var nb int
@@ -81,8 +82,8 @@ func findBrokenDependenciesForTable(table string) []BrokenDependingTable {
 		row := app.db.QueryRow(`
 			SELECT COUNT(*) count
 			FROM ` + deps[i] + ` t
-			LEFT JOIN ` + table + ` d ON t.` + foreign_name + ` = d.` + foreign_name + `
-			WHERE d.` + foreign_name + ` IS NULL
+			LEFT JOIN ` + table + ` d ON t.` + foreign_name + ` = d.` + primary_key_pattern + `
+			WHERE d.` + primary_key_pattern + ` IS NULL
 		`)
 		err := row.Scan(&nb)
 

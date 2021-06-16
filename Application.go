@@ -8,6 +8,7 @@ import (
 )
 
 type Parameters struct {
+	primary_key_pattern string
 	foreign_key_pattern string
 	db_user             string
 	db_pwd              string
@@ -33,6 +34,10 @@ func (a *Application) Load() func() {
 func (a *Application) loadParameters() {
 	a.loadEnvParameters()
 
+	if a.parameters.primary_key_pattern == "" {
+		fmt.Print("\nWhat is the primary key pattern (replace the table name by '%v'. eg: 'id_%v')?\n> ")
+		fmt.Scanf("%s", &a.parameters.primary_key_pattern)
+	}
 	if a.parameters.foreign_key_pattern == "" {
 		fmt.Print("\nWhat is the foreign key pattern (replace the table name by '%v'. eg: 'id_%v')?\n> ")
 		fmt.Scanf("%s", &a.parameters.foreign_key_pattern)
@@ -62,6 +67,7 @@ func (a *Application) loadParameters() {
 }
 
 func (a *Application) loadEnvParameters() {
+	a.parameters.primary_key_pattern = os.Getenv("PRIMARY_KEY_PATTERN")
 	a.parameters.foreign_key_pattern = os.Getenv("FOREIGN_KEY_PATTERN")
 	a.parameters.db_user = os.Getenv("DB_USER")
 	a.parameters.db_pwd = os.Getenv("DB_PWD")

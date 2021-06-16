@@ -13,6 +13,7 @@ $ go run .
 Put config parameters in ``.env`` file for not be prompted :
 
 ```env
+PRIMARY_KEY_PATTERN=
 FOREIGN_KEY_PATTERN=
 DB_USER=
 DB_PWD=
